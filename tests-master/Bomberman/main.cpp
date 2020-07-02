@@ -1,3 +1,11 @@
+/*
+
+Complexity analysis
+3 nested loops with O(n) complexity = O(n^3)         ------        when WHILE(n>7) loop is not implemented
+O(n^3) when WHILE(n>7) is implemented
+
+*/
+
 #include <iostream>
 #include <string>
 #include <array>
@@ -7,13 +15,13 @@ const int n = 3;
 bool input0 = 1;
 bool input25 = 0;
 #else
-const int n = 5;
+const int n = 35;
 bool input0 = 0;
 bool input25 = 1;
 #endif
 
 const int r = 6;
-const int c = 7;
+const int c = 7+1;
 
 void PrintGrid(std::array<std::array<std::string, r>, 3>& stateT, int element);
 std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 3>& stateT, const int& n);
@@ -30,12 +38,12 @@ int main() {
 		initialState[5] = "OO.....";
 	}
 	if (input25) {
-		initialState[0] = ".......";
-		initialState[1] = "...O.O.";
-		initialState[2] = "....O..";
-		initialState[3] = "..O....";
-		initialState[4] = "OO...OO";
-		initialState[5] = "OO.O...";
+		initialState[0] = "........";
+		initialState[1] = "...O.O..";
+		initialState[2] = "....O...";
+		initialState[3] = "..O.....";
+		initialState[4] = "OO...OO.";
+		initialState[5] = "OO.O....";
 	}
 
 	char emptyString[c];
@@ -60,19 +68,28 @@ int main() {
 	std::cin.get();
 }
 
-std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 3>& stateT, const int& n) {
+std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 3>& stateT,const int& n) {
 
 	int t = 2; // t is set to 2 so it is more intuitive to think about T-1 and T-2 seconds
 	int i, j;
 	bool firstBatch=false;
 
-	for (int i_n = 1; i_n <= n; i_n++) {
+	int ajustedIterator = n;
+	int ajustedI_n = 0;
+	if (n > 3) {
+		while (ajustedIterator > 7) { 
+			ajustedIterator -= 7;
+			ajustedI_n += 7;
+		}
+	}
+	
+	for (int i_n = 1; i_n <= ajustedIterator; i_n++) {																			
 		if ((i_n % 2) == 0) {
 			firstBatch = !firstBatch;
 		}
 
-		for (i = 0; i < r; i++) {
-			for (j = 0; j < c; j++) {
+		for (i = 0; i < r; i++) {																								
+			for (j = 0; j < c; j++) {																							
 				int up, down, left, right;
 				up = i - 1;
 				down = i + 1;
@@ -148,7 +165,7 @@ std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 3>& 
 			}
 		}
 
-		std::cout << "i_n = " << i_n << std::endl;
+		std::cout << "i_n = " << i_n + ajustedI_n << std::endl;
 		PrintGrid(stateT, t);
 	}
 
