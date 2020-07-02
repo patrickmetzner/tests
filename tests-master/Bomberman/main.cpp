@@ -2,7 +2,7 @@
 #include <string>
 #include <array>
 
-#if 0
+#if 0			//   1 for input00 and 0 for input25
 const int n = 3;
 bool input0 = 1;
 bool input25 = 0;
@@ -15,8 +15,8 @@ bool input25 = 1;
 const int r = 6;
 const int c = 7;
 
-void PrintGrid(std::array<std::array<std::string, r>, 4>& stateT, int element);
-std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 4>& stateT, const int& n);
+void PrintGrid(std::array<std::array<std::string, r>, 3>& stateT, int element);
+std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 3>& stateT, const int& n);
 
 int main() {
 
@@ -48,21 +48,21 @@ int main() {
 		emptyArray[i] = emptyString;
 	}
 
-	std::array<std::array<std::string, r>, 4> stateT; // this array stores the grid state for T, T-1, T-2 and T-3 seconds
+	std::array<std::array<std::string, r>, 3> stateT; // this array stores the grid state for T, T-1, T-2. T is the present state while T-1 and T-2 are past states. 
 	stateT[1] = emptyArray;
-	stateT[0] = stateT[2] = stateT[3] = initialState;
+	stateT[0] = stateT[2] = initialState;
 
 	std::cout << "Initial State " << std::endl;
-	PrintGrid(stateT, 3);
+	PrintGrid(stateT, 2);
 
 	bomberMan(stateT, n);
 
 	std::cin.get();
 }
 
-std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 4>& stateT, const int& n) {
+std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 3>& stateT, const int& n) {
 
-	int t = 3; // t is set to 3 so it is more intuitive to think about T-1, T-2 and T-3 seconds
+	int t = 2; // t is set to 2 so it is more intuitive to think about T-1 and T-2 seconds
 	int i, j;
 	bool firstBatch=false;
 
@@ -83,22 +83,16 @@ std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 4>& 
 					//std::cout << "i_n % 2 = 0" << std::endl;
 					if ((i_n % 4)==0) { // when [(i_n % 4) == 0], we will reallocate bombs that were planted initially 
 						//std::cout << "i_n % 4 = 0" << std::endl;
-						if (stateT[t - 1][i][j] == '.') { 
+						if (stateT[t][i][j] == '.') { 
 							stateT[t][i][j] = 'O';
-							stateT[t - 3][i][j] = 'O';
-						}
-						else {
-							stateT[t][i][j] = stateT[t - 1][i][j];
+							stateT[t - 2][i][j] = 'O';
 						}
 					}
 					if ((i_n % 4) != 0) {           // when [(i_n % 4) != 0], we will reallocate bombs that were planted in i_n == 2 seconds
 						//std::cout << "i_n % 4 != 0" << std::endl;
-						if (stateT[t - 1][i][j] == '.') { 
+						if (stateT[t][i][j] == '.') { 
 							stateT[t][i][j] = 'O';
-							stateT[t - 2][i][j] = 'O';
-						}
-						else {
-							stateT[t][i][j] = stateT[t - 1][i][j];
+							stateT[t - 1][i][j] = 'O';
 						}
 					}
 				}
@@ -106,8 +100,31 @@ std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 4>& 
 					//std::cout << "i_n % 2 != 0" << std::endl;
 					if (firstBatch==true){
 						//std::cout << "firstBatch" << std::endl;
-						if (stateT[t - 3][i][j] == 'O') { 
-							stateT[t - 3][i][j] = '.'; //clear stateT[t - 3]
+						if (stateT[t - 2][i][j] == 'O') { 
+							stateT[t - 2][i][j] = '.'; //clear stateT[t - 2]
+							stateT[t][i][j] = '.';
+							if (up >= 0) {
+								stateT[t][up][j] = '.';
+								stateT[t - 1][up][j] = '.'; //clear stateT[t - 1]
+							}
+							if (down < r) {
+								stateT[t][down][j] = '.';
+								stateT[t - 1][down][j] = '.'; //clear stateT[t - 1]
+							}
+							if (left >= 0) {
+								stateT[t][i][left] = '.';
+								stateT[t - 1][i][left] = '.'; //clear stateT[t - 1]
+							}
+							if (right < c) {
+								stateT[t][i][right] = '.';
+								stateT[t - 1][i][right] = '.'; //clear stateT[t - 1]
+							}
+						}
+					}
+					if (firstBatch == false) {
+						//std::cout << "not firstBatch" << std::endl;
+						if (stateT[t - 1][i][j] == 'O') { 
+							stateT[t - 1][i][j] = '.'; //clear stateT[t - 1]
 							stateT[t][i][j] = '.';
 							if (up >= 0) {
 								stateT[t][up][j] = '.';
@@ -127,34 +144,10 @@ std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 4>& 
 							}
 						}
 					}
-					if (firstBatch == false) {
-						//std::cout << "not firstBatch" << std::endl;
-						if (stateT[t - 2][i][j] == 'O') { 
-							stateT[t - 2][i][j] = '.'; //clear stateT[t - 2]
-							stateT[t][i][j] = '.';
-							if (up >= 0) {
-								stateT[t][up][j] = '.';
-								stateT[t - 3][up][j] = '.'; //clear stateT[t - 3]
-							}
-							if (down < r) {
-								stateT[t][down][j] = '.';
-								stateT[t - 3][down][j] = '.'; //clear stateT[t - 3]
-							}
-							if (left >= 0) {
-								stateT[t][i][left] = '.';
-								stateT[t - 3][i][left] = '.'; //clear stateT[t - 3]
-							}
-							if (right < c) {
-								stateT[t][i][right] = '.';
-								stateT[t - 3][i][right] = '.'; //clear stateT[t - 3]
-							}
-						}
-					}
 				}			
 			}
 		}
 
-		stateT[t - 1] = stateT[t];
 		std::cout << "i_n = " << i_n << std::endl;
 		PrintGrid(stateT, t);
 	}
@@ -162,7 +155,7 @@ std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 4>& 
 	return stateT[t];
 }
 
-void PrintGrid(std::array<std::array<std::string, r>, 4>& stateT, int element) {
+void PrintGrid(std::array<std::array<std::string, r>, 3>& stateT, int element) {
 	int t = element;
 	for (int i = 0; i < r; i++) {
 		for (int j = 0; j < c; j++) {
