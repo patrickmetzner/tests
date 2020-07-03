@@ -1,13 +1,21 @@
 /*
 
-Complexity analysis
+Time Complexity Analysis
+
 	when WHILE(n>7) loop is not implemented{
 		3 nested loops with O(n) complexity = O(n^3)
 	}
 
     when WHILE(n>7) is implemented{
-		O(n) + [ 2 nested O(n) loops ]  =  O(n) + O(n^2)  =   O(n^2)
+		1x O(n) +  7x [ 2 nested O(n) loops ]  = 1x O(n) +  7x O(n^2)  =   O(n^2)
 	}
+
+
+
+Space Complexity Analysis {   O(1)   }    ---> When stateT is passed by reference   
+if stateT were not passed by ref, Space Compl. would be O(n^2).   The extra memory needed would be 4xNxN.
+	
+		
 
 */
 
