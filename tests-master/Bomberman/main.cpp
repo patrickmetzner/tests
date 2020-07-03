@@ -89,11 +89,9 @@ std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 3>& 
 
 	int ajustedIterator = n;
 	int ajustedI_n = 0;
-	if (n > 3) {
-		while (ajustedIterator > 7) { 
-			ajustedIterator -= 7;
-			ajustedI_n += 7;
-		}
+	while (ajustedIterator > 7) { 
+		ajustedIterator -= 7;
+		ajustedI_n += 7;
 	}
 	
 	for (int i_n = 1; i_n <= ajustedIterator; i_n++) {																			
