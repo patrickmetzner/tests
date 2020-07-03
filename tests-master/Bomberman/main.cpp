@@ -1,8 +1,13 @@
 /*
 
 Complexity analysis
-3 nested loops with O(n) complexity = O(n^3)         ------        when WHILE(n>7) loop is not implemented
-O(n) when WHILE(n>7) is implemented
+	when WHILE(n>7) loop is not implemented{
+		3 nested loops with O(n) complexity = O(n^3)
+	}
+
+    when WHILE(n>7) is implemented{
+		O(n) + [ 2 nested O(n) loops ]  =  O(n) + O(n^2)  =   O(n^2)
+	}
 
 */
 
