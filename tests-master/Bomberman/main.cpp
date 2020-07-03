@@ -2,7 +2,7 @@
 
 Complexity analysis
 3 nested loops with O(n) complexity = O(n^3)         ------        when WHILE(n>7) loop is not implemented
-O(n^3) when WHILE(n>7) is implemented
+O(n) when WHILE(n>7) is implemented
 
 */
 
@@ -15,13 +15,13 @@ const int n = 3;
 bool input0 = 1;
 bool input25 = 0;
 #else
-const int n = 35;
+const int n = 5;
 bool input0 = 0;
 bool input25 = 1;
 #endif
 
 const int r = 6;
-const int c = 7+1;
+const int c = 7;
 
 void PrintGrid(std::array<std::array<std::string, r>, 3>& stateT, int element);
 std::array<std::string, r> bomberMan(std::array<std::array<std::string, r>, 3>& stateT, const int& n);
@@ -38,12 +38,12 @@ int main() {
 		initialState[5] = "OO.....";
 	}
 	if (input25) {
-		initialState[0] = "........";
-		initialState[1] = "...O.O..";
-		initialState[2] = "....O...";
-		initialState[3] = "..O.....";
-		initialState[4] = "OO...OO.";
-		initialState[5] = "OO.O....";
+		initialState[0] = ".......";
+		initialState[1] = "...O.O.";
+		initialState[2] = "....O..";
+		initialState[3] = "..O....";
+		initialState[4] = "OO...OO";
+		initialState[5] = "OO.O...";
 	}
 
 	char emptyString[c];
